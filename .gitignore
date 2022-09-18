@@ -128,3 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/
+/src/PyGPL/main.py
+/src/PyGPL/test.pygpl
+/src/PyGPL/testt.py
