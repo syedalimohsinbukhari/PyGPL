@@ -21,12 +21,12 @@ def delete_fig_agg(fig_agg):
 
 def run():
     layout = [[sg.Text('LinePlot')],
-              [sg.Text('Input X'), sg.InputText(key='-x-', expand_x=True)],
-              [sg.Text('Input Y'), sg.InputText(key='-y-', expand_x=True)],
+              [sg.Text('Input X'), sg.InputText(key='-x-', expand_x=True), sg.FileBrowse('Browse')],
+              [sg.Text('Input Y'), sg.InputText(key='-y-', expand_x=True), sg.FileBrowse('Browse')],
               [sg.Text('x_label'), sg.InputText(key='-x-label-', s=15),
                sg.Text('y_label'), sg.InputText(key='-y-label-', s=15),
                sg.Text('color'), sg.InputText(key='-color-', s=15), sg.Text('title'), sg.InputText(key='-title-', s=30),
-               sg.Button('save')],
+               sg.Button('Save')],
               [sg.Button('Plot'), sg.Button('Exit')],
               [sg.Canvas(key='-CANVAS-')]]
 
@@ -37,7 +37,7 @@ def run():
     while True:
         event, values = root.read()
         lp = LinePlot(pysimplegui_values=values)
-        save = True if event == 'save' else False
+        save = True if event == 'Save' else False
 
         if event == sg.WIN_CLOSED or event == 'Exit':  # if user closes window or clicks cancel
             break

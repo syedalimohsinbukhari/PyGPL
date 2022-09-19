@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 .idea/
 /src/PyGPL/main.py
-/src/PyGPL/test.pygpl
+/src/PyGPL/test.py
 /src/PyGPL/testt.py
