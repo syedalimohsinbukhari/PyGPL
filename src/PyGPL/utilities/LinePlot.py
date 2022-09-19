@@ -12,14 +12,16 @@ class LinePlot:
             self.x = [x] if not isinstance(x[0], list) else x
         except SyntaxError:
             exec(open(pysimplegui_values['-x-']).read(), data := {})
-            self.x = [data['x'].tolist()] if isinstance(data['x'], ndarray) else data['x']
+            variable = data[list(data.keys())[-1]]
+            self.x = [variable.tolist()] if isinstance(variable, ndarray) else variable
 
         try:
             y = eval(pysimplegui_values['-y-'])
             self.y = [y] if not isinstance(y[0], list) else [i for i in y]
         except SyntaxError:
             exec(open(pysimplegui_values['-y-']).read(), data := {})
-            self.y = [data['y'].tolist()] if isinstance(data['y'], ndarray) else data['y']
+            variable = data[list(data.keys())[-1]]
+            self.y = [variable.tolist()] if isinstance(variable, ndarray) else variable
 
         col = pysimplegui_values['-color-']
 
