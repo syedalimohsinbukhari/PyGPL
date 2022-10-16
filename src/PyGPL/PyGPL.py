@@ -1,6 +1,6 @@
 """Created on Sep 18 16:52:41 2022."""
 
-import PySimpleGUI as sg
+import PySimpleGUI as pSGUI
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from utilities.LinePlot import LinePlot
@@ -19,33 +19,55 @@ def delete_fig_agg(fig_agg):
     fig_agg.get_tk_widget().forget()
 
 
-def run():
-    layout = [[sg.Text('LinePlot')],
-              [sg.Text('Input X'), sg.InputText(key='-x-', expand_x=True), sg.FileBrowse('Browse')],
-              [sg.Text('Input Y'), sg.InputText(key='-y-', expand_x=True), sg.FileBrowse('Browse')],
-              [sg.Text('x_label'), sg.InputText(key='-x-label-', s=15),
-               sg.Text('y_label'), sg.InputText(key='-y-label-', s=15),
-               sg.Text('color'), sg.InputText(key='-color-', s=15), sg.Text('title'), sg.InputText(key='-title-', s=30),
-               sg.Button('Save')],
-              [sg.Button('Plot'), sg.Button('Exit')],
-              [sg.Canvas(key='-CANVAS-')]]
+def line_plot():
+    layout = [[pSGUI.Text('LinePlot')],
+              [pSGUI.Text('Input X'), pSGUI.InputText(key='-x-', expand_x=True), pSGUI.FileBrowse('Browse')],
+              [pSGUI.Text('Input Y'), pSGUI.InputText(key='-y-', expand_x=True), pSGUI.FileBrowse('Browse')],
+              [pSGUI.Text('x_label'), pSGUI.InputText(key='-x-label-', s=15),
+               pSGUI.Text('y_label'), pSGUI.InputText(key='-y-label-', s=15),
+               pSGUI.Text('color'), pSGUI.InputText(key='-color-', s=15),
+               pSGUI.Text('title'), pSGUI.InputText(key='-title-', s=30),
+               pSGUI.Button('Save', key='-save-')],
+              [pSGUI.Button('Plot', key='-plot-'), pSGUI.Button('Exit', key='-exit-')],
+              [pSGUI.Canvas(key='-CANVAS-')]]
 
-    root = sg.Window('PyGPL Interface', layout=layout, size=(900, 900), auto_size_text=True, resizable=True)
+    win_lp = pSGUI.Window('Line Plot', layout=layout, size=(900, 600), auto_size_text=True, resizable=True,
+                          finalize=True)
 
     fig_agg = None
 
     while True:
-        event, values = root.read()
-        lp = LinePlot(pysimplegui_values=values)
-        save = True if event == 'Save' else False
+        event, values = win_lp.read()
 
-        if event == sg.WIN_CLOSED or event == 'Exit':  # if user closes window or clicks cancel
+        if event == pSGUI.WIN_CLOSED or event in ['-exit-', None]:
             break
 
-        if fig_agg is not None:
-            delete_fig_agg(fig_agg=fig_agg)
+        if event == '-plot-':
+            lp = LinePlot(pysimplegui_values=values)
+            save = True if event == '-save-' else False
 
-        fig_agg = draw_figure(root['-CANVAS-'].TKCanvas, lp.plot(save=save))
+            if fig_agg is not None:
+                delete_fig_agg(fig_agg=fig_agg)
+
+            fig_agg = draw_figure(win_lp['-CANVAS-'].TKCanvas, lp.plot(save=save))
+
+    win_lp.close()
+
+
+def run():
+    layout = [[pSGUI.Button('Line Plot', key='-line-plot-')],
+              [pSGUI.Button('Exit', key='-exit-')]]
+
+    root = pSGUI.Window('Main', layout, finalize=True)
+
+    while True:
+        event, values = root.read()
+
+        if event == pSGUI.WIN_CLOSED or event in ['-exit-', None]:
+            break
+
+        if event == '-line-plot-':
+            line_plot()
 
     root.close()
 

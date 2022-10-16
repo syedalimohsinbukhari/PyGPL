@@ -32,10 +32,6 @@ class LinePlot:
 
         self.__consistency_check()
 
-    @staticmethod
-    def __strip(val):
-        return [float(i) for i in val.replace('[', '').replace(']', '').split(',')]
-
     def __consistency_check(self):
         len_x, len_y = len(self.x), len(self.y)
 
