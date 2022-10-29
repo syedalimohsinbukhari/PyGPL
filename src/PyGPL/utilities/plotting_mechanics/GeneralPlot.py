@@ -4,25 +4,9 @@ import matplotlib.pyplot as plt
 from numpy import ndarray
 
 
-class LinePlot:
+class GeneralPlot:
 
     def __init__(self, pysimplegui_values):
-        try:
-            x = eval(pysimplegui_values['-x-'])
-            self.x = [x] if not isinstance(x[0], list) else x
-        except SyntaxError:
-            exec(open(pysimplegui_values['-x-']).read(), data := {})
-            variable = data[list(data.keys())[-1]]
-            self.x = [variable.tolist()] if isinstance(variable, ndarray) else variable
-
-        try:
-            y = eval(pysimplegui_values['-y-'])
-            self.y = [y] if not isinstance(y[0], list) else [i for i in y]
-        except SyntaxError:
-            exec(open(pysimplegui_values['-y-']).read(), data := {})
-            variable = data[list(data.keys())[-1]]
-            self.y = [variable.tolist()] if isinstance(variable, ndarray) else variable
-
         col = pysimplegui_values['-color-']
 
         self.x_label = pysimplegui_values['-x-label-']
@@ -30,7 +14,21 @@ class LinePlot:
         self.title = pysimplegui_values['-title-']
         self.color = None if col == '' else col
 
+        self.values = pysimplegui_values
+
+        self.x = self.__get_value('-x-')
+        self.y = self.__get_value('-y-')
+
         self.__consistency_check()
+
+    def __get_value(self, variable):
+        try:
+            var = eval(self.values[variable])
+            return [var] if not isinstance(var[0], list) else var
+        except SyntaxError:
+            exec(open(self.values[variable]).read(), data := {})
+            var = data[list(data.keys())[-1]]
+            return var.tolist() if isinstance(var, ndarray) else var
 
     def __consistency_check(self):
         len_x, len_y = len(self.x), len(self.y)
@@ -40,11 +38,22 @@ class LinePlot:
         elif len_y < len_x:
             self.y = self.y * len_x
 
-    def plot(self, save=False):
+    @property
+    def get_x(self):
+        return self.x
+
+    @property
+    def get_y(self):
+        return self.y
+
+    def plot(self, plot_type, save=False):
         plt.clf()
         plt.close()
 
-        [plt.plot(i, j, color=self.color) for i, j in zip(self.x, self.y)]
+        if plot_type == 'line plot':
+            plt.plot(self.x, self.y, color=self.color)
+        elif plot_type == 'scatter plot':
+            plt.scatter(self.x, self.y, color=self.color)
 
         plt.title(self.title)
         plt.xlabel(self.x_label)
