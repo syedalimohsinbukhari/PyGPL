@@ -1,7 +1,7 @@
 """Created on Sep 18 15:21:41 2022."""
 
 import matplotlib.pyplot as plt
-from numpy import ndarray
+from numpy import array
 
 
 class GeneralPlot:
@@ -16,19 +16,17 @@ class GeneralPlot:
 
         self.values = pysimplegui_values
 
-        self.x = self.__get_value('-x-')
-        self.y = self.__get_value('-y-')
+        self.x = array(self.__get_value('-x-'))
+        self.y = array(self.__get_value('-y-'))
 
         self.__consistency_check()
 
     def __get_value(self, variable):
         try:
-            var = eval(self.values[variable])
-            return [var] if not isinstance(var[0], list) else var
+            return eval(self.values[variable])
         except SyntaxError:
             exec(open(self.values[variable]).read(), data := {})
-            var = data[list(data.keys())[-1]]
-            return var.tolist() if isinstance(var, ndarray) else var
+            return data[list(data.keys())[-1]]
 
     def __consistency_check(self):
         len_x, len_y = len(self.x), len(self.y)

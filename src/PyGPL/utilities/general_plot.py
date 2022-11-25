@@ -23,8 +23,7 @@ def general_plot(plot_type):
               [pSGUI.Text('X'), show_x, pSGUI.Text('Y'), show_y],
               [pSGUI.Canvas(key='-CANVAS-')]]
 
-    win_ = pSGUI.Window(plot_type, layout=layout, size=(900, 600), auto_size_text=True, resizable=True,
-                        finalize=True)
+    win_ = pSGUI.Window(plot_type, layout=layout, size=(900, 600), auto_size_text=True, resizable=True, finalize=True)
 
     fig_agg = None
 
@@ -42,7 +41,8 @@ def general_plot(plot_type):
 
         if event == '-show-x-':
             show_x.update(GeneralPlot(values).get_x)
-        elif event == '-show-y-':
+
+        if event == '-show-y-':
             show_y.update(GeneralPlot(values).get_y)
 
     win_.close()

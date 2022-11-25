@@ -6,10 +6,11 @@ from .utilities.general_plot import general_plot
 
 
 def run():
-    layout = [[pSGUI.Button('Line Plot', key='-line-plot-'), pSGUI.Button('Scatter Plot', key='-scatter-plot-')],
+    layout = [[pSGUI.Button('Line Plot', key='-line-plot-'),
+               pSGUI.Button('Scatter Plot', key='-scatter-plot-')],
               [pSGUI.Button('Exit', key='-exit-')]]
 
-    root = pSGUI.Window('Main', layout, finalize=True)
+    root = pSGUI.Window('Main', layout, size=(900, 600), finalize=True)
 
     while True:
         event, values = root.read()

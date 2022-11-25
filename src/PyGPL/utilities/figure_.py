@@ -1,4 +1,5 @@
 """Created on Oct 16 22:48:20 2022."""
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
@@ -11,6 +12,5 @@ def draw_figure(canvas, figure):
 
 
 # taken from https://stackoverflow.com/q/63155989
-
 def delete_fig_agg(fig_agg):
     fig_agg.get_tk_widget().forget()
