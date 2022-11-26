@@ -1,7 +1,7 @@
 """Created on Sep 18 15:21:41 2022."""
 
 import matplotlib.pyplot as plt
-from numpy import array
+import numpy as np
 
 
 class GeneralPlot:
@@ -16,8 +16,8 @@ class GeneralPlot:
 
         self.values = pysimplegui_values
 
-        self.x = array(self.__get_value('-x-'))
-        self.y = array(self.__get_value('-y-'))
+        self.x = np.array(self.__get_value('-x-'))
+        self.y = np.array(self.__get_value('-y-'))
 
         self.__consistency_check()
 
@@ -36,17 +36,10 @@ class GeneralPlot:
         elif len_y < len_x:
             self.y = self.y * len_x
 
-    @property
-    def get_x(self):
-        return self.x
-
-    @property
-    def get_y(self):
-        return self.y
-
     def plot(self, plot_type, save=False):
         plt.clf()
         plt.close()
+        plt.grid('on')
 
         if plot_type == 'line plot':
             plt.plot(self.x, self.y, color=self.color)
