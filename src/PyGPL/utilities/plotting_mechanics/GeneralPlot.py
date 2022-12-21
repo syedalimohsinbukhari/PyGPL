@@ -1,5 +1,7 @@
 """Created on Sep 18 15:21:41 2022."""
 
+import importlib.util
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -25,26 +27,31 @@ class GeneralPlot:
         try:
             return eval(self.values[variable])
         except SyntaxError:
-            exec(open(self.values[variable]).read(), data := {})
-            return data[list(data.keys())[-1]]
+            spec = importlib.util.spec_from_file_location("data", self.values[variable])
+            data_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(data_module)
+            return data_module.__dict__[list(data_module.__dict__.keys())[-1]]
 
     def __consistency_check(self):
         len_x, len_y = len(self.x), len(self.y)
-
         if len_x < len_y:
-            self.x = self.x * len_y
+            self.x = np.pad(self.x, (0, len_y - len_x), 'constant')
         elif len_y < len_x:
-            self.y = self.y * len_x
+            self.y = np.pad(self.y, (0, len_x - len_y), 'constant')
 
     def plot(self, plot_type, save=False):
         plt.clf()
         plt.close()
-        plt.grid('on')
 
-        if plot_type == 'line plot':
-            plt.plot(self.x, self.y, color=self.color)
-        elif plot_type == 'scatter plot':
-            plt.scatter(self.x, self.y, color=self.color)
+        if plot_type != 'bar plot':
+            plt.grid('on')
+
+        plot_functions = {
+            'line plot': plt.plot,
+            'scatter plot': plt.scatter,
+            'bar plot': plt.bar
+            }
+        plot_functions[plot_type](self.x, self.y, color=self.color)
 
         plt.title(self.title)
         plt.xlabel(self.x_label)
